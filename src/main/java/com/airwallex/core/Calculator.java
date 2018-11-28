@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
@@ -67,7 +68,12 @@ public class Calculator {
 						isContinueHanlde[0] = false;
 					}
 				} else {
-					stack.push(Double.valueOf(value));
+					try {
+						stack.push(Double.valueOf(value));
+					} catch (NumberFormatException e) {
+						//FIXME: need to fix the regex which is not supporting some words like "no"
+						//Now skip upon case
+					}
 				}
 			} else {
 				if (!PropertyConfig.isOperator(value)) {
