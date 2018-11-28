@@ -12,11 +12,11 @@ import org.springframework.util.StringUtils;
 @Component
 public class PropertyConfig {
 
-	private static String regexPetten;
+	public static String regexPetten;
 		
-	private static String operatorMapping;
+	public static String operatorMapping;
 	
-	private static Map<String, String> operator = new HashMap<> ();
+	public static Map<String, String> operator = new HashMap<> ();
 	
 	@Value("${input.regex.petten}")
     public void setRegexPetten(String regexPetten) {
@@ -32,19 +32,21 @@ public class PropertyConfig {
 		if (!StringUtils.isEmpty(operatorMapping)) {
 			String [] mapping = operatorMapping.split(",");
 			Arrays.asList(mapping).forEach(value -> {
-				String [] operatorValue = value.split("|");
+				String [] operatorValue = value.split("\\|");
 				operator.put(operatorValue[0], operatorValue[1]);
 			});
 		}
 	}
 	
 	public static boolean isOperator(String character) {
-		if (operator == null) {transferOperatorMapping();};
-		return operator.containsKey("character");
+		if (operator.size() == 0) {transferOperatorMapping();};
+		return operator.containsKey(character);
 	}
 	
 	public static boolean isMatchRegexPetten(String input) {
 		return Pattern.matches(regexPetten, input);
 	}
+	
+	
 	
 }
