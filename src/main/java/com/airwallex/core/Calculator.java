@@ -21,15 +21,14 @@ import lombok.Data;
 @Data
 public class Calculator {
 
+	/** calculated stack */
 	private Stack<Double> stack = new Stack<> ();
 	
-	private Stack<Double> undoStack = new Stack<> ();
-	
+	/** temp input char */
 	private Stack<String> unsettledStack = new Stack<> ();
 
+	/** operator process error then left number will be saved */
 	private List<Double> errorNumber = new ArrayList<> ();
-	
-	private boolean isOperated = false;
 	
 	public void process(String inputValue) throws CalculatorException {
 		if (StringUtils.isEmpty(inputValue)) {
@@ -37,7 +36,6 @@ public class Calculator {
 		}
 		
 		errorNumber.clear();
-		isOperated = false;
 		
 		String[] values = inputValue.trim().split("\\s+");
 		Arrays.asList(values).forEach(value -> {
@@ -55,7 +53,6 @@ public class Calculator {
 		boolean [] isContinueHanlde = new boolean [] {true};
 		Iterables.forEach(unsettledStack, (index, value) -> {
 			if (isContinueHanlde[0]) {
-				undoStack = stack;
 				if (PropertyConfig.isOperator(value)) {
 					try {
 						executeOperator(value);
